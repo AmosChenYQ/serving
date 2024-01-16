@@ -116,3 +116,30 @@ individually (e.g. batch scheduling) and/or extend it to serve new use cases.
 
 Please refer to the official [TensorFlow website](http://tensorflow.org) for
 more information.
+
+
+## Build from source
+
+```bash
+export TF_ENABLE_XLA=1
+export TF_CUDA_COMPUTE_CAPABILITIES=8.6
+export TF_NCCL_VERSION=2
+export TF_NEED_HDFS=0
+export TF_CUDNN_VERSION=8
+export TF_TENSORRT_VERSION=8
+export TF_CUDA_VERSION=11.4
+export TF_NEED_CUDA=1
+export TF_CUBLAS_VERSION=11
+export TF_CUDA_PATHS=/usr,/usr/local/cuda
+export TF_NEED_TENSORRT=1
+export CC_OPT_FLAGS="-march=native -mtune=native"
+
+bazel build --config=cuda --copt="-fPIC" --cxxopt="-D_GLIBCXX_USE_CXX11_ABI=0" --verbose_failures tensorflow_serving/model_servers:tensorflow_model_server
+
+cp bazel-bin/tensorflow_serving/model_servers/tensorflow_model_server /usr/local/bin/
+
+bazel build --verbose_failures --cxxopt="-D_GLIBCXX_USE_CXX11_ABI=0" tensorflow_serving/tools/pip_package:build_pip_package
+
+bazel-bin/tensorflow_serving/tools/pip_package/build_pip_package /tmp/pip
+
+```

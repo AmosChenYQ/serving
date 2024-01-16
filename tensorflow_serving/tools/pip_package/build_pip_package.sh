@@ -37,6 +37,7 @@ function main() {
   mkdir -p ${TMPDIR}/tensorflow_serving/apis
   mkdir -p ${TMPDIR}/tensorflow_serving/config
   mkdir -p ${TMPDIR}/tensorflow_serving/core
+  mkdir -p ${TMPDIR}/tensorflow_serving/servables/tensorflow
   mkdir -p ${TMPDIR}/tensorflow_serving/sources/storage_path
   mkdir -p ${TMPDIR}/tensorflow_serving/util
 
@@ -59,12 +60,17 @@ function main() {
   cp bazel-genfiles/tensorflow_serving/sources/storage_path/*_pb2.py \
     "${TMPDIR}/tensorflow_serving/sources/storage_path"
 
+  cp bazel-genfiles/tensorflow_serving/servables/tensorflow/*_pb2.py \
+    "${TMPDIR}/tensorflow_serving/servables/tensorflow"
+
   cp bazel-genfiles/tensorflow_serving/util/*_pb2.py \
     "${TMPDIR}/tensorflow_serving/util"
 
   touch "${TMPDIR}/tensorflow_serving/apis/__init__.py"
   touch "${TMPDIR}/tensorflow_serving/config/__init__.py"
   touch "${TMPDIR}/tensorflow_serving/core/__init__.py"
+  touch "${TMPDIR}/tensorflow_serving/servables/__init__.py"
+  touch "${TMPDIR}/tensorflow_serving/servables/tensorflow/__init__.py"
   touch "${TMPDIR}/tensorflow_serving/sources/__init__.py"
   touch "${TMPDIR}/tensorflow_serving/sources/storage_path/__init__.py"
   touch "${TMPDIR}/tensorflow_serving/util/__init__.py"
