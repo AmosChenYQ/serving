@@ -375,6 +375,46 @@ cc_binary(
     ],
 )
 
+cc_library(
+    name = "frontend_load_balancer_lib",
+    srcs = [
+        "load_balancer.cc",
+    ],
+    hdrs = [
+        "load_balancer.h",
+    ],
+    visibility = [
+        "//tensorflow_serving:internal",
+    ],
+    deps = [
+        "//tensorflow_serving/apis:classification_proto",
+        "//tensorflow_serving/apis:get_model_metadata_proto",
+        "//tensorflow_serving/apis:inference_proto",
+        "//tensorflow_serving/apis:load_balancer_proto",
+        "//tensorflow_serving/apis:load_balancer_service_proto",
+        "//tensorflow_serving/apis:predict_proto",
+        "//tensorflow_serving/apis:prediction_service_proto",
+        "//tensorflow_serving/apis:regression_proto",
+        "@com_google_absl//absl/flags:flag",
+        "@com_google_absl//absl/flags:parse",
+        "@com_google_absl//absl/strings:str_format",
+        "@grpc//:grpc++",
+        "@org_tensorflow//tensorflow/core:framework",
+        "@org_tensorflow//tensorflow/core:lib",
+    ],
+)
+
+cc_binary(
+    name = "frontend_load_balancer",
+    stamp = 1,
+    visibility = [
+        "//tensorflow_serving:internal",
+    ],
+    deps = [
+        ":frontend_load_balancer_lib",
+    ],
+)
+
 py_test(
     name = "tensorflow_model_server_test",
     size = "medium",

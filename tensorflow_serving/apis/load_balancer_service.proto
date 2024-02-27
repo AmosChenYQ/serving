@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package tensorflow.serving;
+option cc_enable_arenas = true;
+
+import "tensorflow_serving/apis/load_balancer.proto";
+import "tensorflow_serving/apis/predict.proto";
+
+// open source marker; do not remove
+// LoadBalancerService acts as a load balancer which work at the 
+// level of application layer  
+service LoadBalancerService {
+  // Predict -- Behaves like Predict method in PredictService, but it will decide
+  // batch size in load balancer side.
+  rpc Predict(LoadBalancerRequest) returns (PredictResponse);
+}

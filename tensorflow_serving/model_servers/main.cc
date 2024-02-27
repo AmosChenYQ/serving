@@ -140,7 +140,7 @@ int main(int argc, char** argv) {
                        "--platform_config_file is non-empty."),
       tensorflow::Flag("tensorflow_intra_op_parallelism",
                        &options.tensorflow_intra_op_parallelism,
-                       "Number of threads to use to parallelize the execution"
+                       "Number of threads to use to parallelize the execution "
                        "of an individual op. Auto-configured by default."
                        "Note that this option is ignored if "
                        "--platform_config_file is non-empty."),

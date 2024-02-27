@@ -645,8 +645,10 @@ Status ServerCore::CreateRouter(
 }
 
 Status ServerCore::CreateAdapters(SourceAdapters* adapters) const {
+  VLOG(1) << "Create adapters from platform to router port";
   for (const auto& entry : platform_to_router_port_) {
     const string& platform = entry.first;
+    VLOG(1) << "Create adaptor for platform " << platform;
     std::unique_ptr<StoragePathSourceAdapter> adapter;
     TF_RETURN_IF_ERROR(CreateAdapter(platform, &adapter));
     adapters->platform_adapters[platform] = std::move(adapter);
