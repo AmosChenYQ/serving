@@ -21,6 +21,7 @@ filegroup(
 )
 
 load("//tensorflow_serving:serving.bzl", "serving_proto_library")
+load("//tensorflow_serving:serving.bzl", "serving_proto_library_py")
 
 serving_proto_library(
     name = "session_bundle_config_proto",
@@ -32,6 +33,15 @@ serving_proto_library(
     deps = [
         "@com_google_protobuf//:cc_wkt_protos",
         "@org_tensorflow//tensorflow/core:protos_all_cc",
+    ],
+)
+
+serving_proto_library_py(
+    name = "session_bundle_config_proto_py_pb2",
+    srcs = ["session_bundle_config.proto"],
+    proto_library = "session_bundle_config_proto",
+    deps = [
+        "@org_tensorflow//tensorflow/core:protos_all_py",
     ],
 )
 

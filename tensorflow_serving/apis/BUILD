@@ -21,6 +21,7 @@ filegroup(
 load("//tensorflow_serving:serving.bzl", "serving_proto_library")
 load("//tensorflow_serving:serving.bzl", "serving_proto_library_py")
 load("//tensorflow_serving:serving.bzl", "serving_go_grpc_library")
+load("@com_google_protobuf//:protobuf.bzl", "py_proto_library")
 load("@org_tensorflow//tensorflow/core/platform:default/build_config.bzl", "tf_jspb_proto_library", "tf_pyclif_proto_library")
 
 serving_proto_library(
@@ -397,5 +398,61 @@ cc_library(
     deps = [
         ":regression_proto",
         "@org_tensorflow//tensorflow/core:lib",
+    ],
+)
+
+serving_proto_library(
+    name = "load_balancer_proto",
+    srcs = ["load_balancer.proto"],
+    cc_api_version = 2,
+    deps = [
+        ":predict_proto",
+        "@org_tensorflow//tensorflow/core:protos_all_cc",
+    ],
+)
+
+serving_proto_library(
+    name = "load_balancer_service_proto",
+    srcs = ["load_balancer_service.proto"],
+    has_services = 1,
+    cc_api_version = 2,
+    cc_grpc_version = 1,
+    deps = [
+        ":predict_proto",
+        ":load_balancer_proto",
+    ],
+)
+
+serving_proto_library_py(
+    name = "gen_load_balancer_proto_pb2_py",
+    srcs = ["load_balancer.proto"],
+    proto_library = "load_balancer_proto",
+    deps = [
+        "@org_tensorflow//tensorflow/core:protos_all_py",
+    ],
+)
+
+py_proto_library(
+    name = "gen_load_balancer_service_proto_pb2_py",
+    srcs = ["load_balancer_service.proto"],
+    srcs_version = "PY2AND3",
+    deps = [
+        "@com_google_protobuf//:protobuf_python",
+        "@org_tensorflow//tensorflow/core:protos_all_py",
+    ],
+    use_grpc_plugin = True,
+    default_runtime = "@com_google_protobuf//:protobuf_python",
+    protoc = "@com_google_protobuf//:protoc",
+)
+
+py_library(
+    name = "load_balancer_service_proto_py_pb2",
+    srcs = [
+        "load_balancer_service_pb2.py",
+        "load_balancer_service_pb2_grpc.py",
+    ],
+    srcs_version = "PY2AND3",
+    deps = [
+        ":predict_proto_py_pb2",
     ],
 )

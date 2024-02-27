@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package tensorflow.serving;
+option cc_enable_arenas = true;
+
+import "tensorflow_serving/apis/predict.proto";
+
+message LoadBalancerRequest {
+  // Predict request.
+  PredictRequest predict_request = 1;
+
+  // SLO target.
+  // This slo target unit is in milli-second. This target will be used to
+  // in load balancer's queue to change priority of this request which can
+  // reach a lower slo-violation rate.
+  uint64 slo_target = 2;
+}

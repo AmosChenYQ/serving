@@ -158,6 +158,7 @@ Status TensorflowPredictor::PredictWithModelSpec(const RunOptions& run_options,
                                                  const PredictRequest& request,
                                                  PredictResponse* response) {
   if (use_saved_model_) {
+    LOG(INFO) << "TensorflowPredictor uses saved model";
     ServableHandle<SavedModelBundle> bundle;
     TF_RETURN_IF_ERROR(core->GetServableHandle(model_spec, &bundle));
     return internal::RunPredict(

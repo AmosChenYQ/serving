@@ -108,6 +108,7 @@ Status SavedModelBundleFactory::EstimateResourceRequirement(
 Status SavedModelBundleFactory::CreateSavedModelBundleWithMetadata(
     const Loader::Metadata& metadata, const string& path,
     std::unique_ptr<SavedModelBundle>* bundle) {
+  VLOG(1) << "Create saved model bundle with meta data";
   return InternalCreateSavedModelBundle(metadata, path, bundle);
 }
 

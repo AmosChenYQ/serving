@@ -234,6 +234,9 @@ Status BatchingSession::Create(
     const BatchingSessionSchedulerCreator& scheduler_creator =
         entry.scheduler_creator;
 
+    LOG(INFO) << "Create batch scheduler with tensor signature:\n" 
+              << TensorSignatureDebugString(signature);
+
     std::unique_ptr<BatchScheduler<BatchingSessionTask>> batch_scheduler;
     TF_RETURN_IF_ERROR(scheduler_creator(
         [signature, raw_batching_session](
@@ -545,6 +548,9 @@ void BatchingSession::ProcessBatch(
   // As a possible performance optimization, consider overlapping the tensor
   // concatenation with waiting for the batch to close (i.e. do the
   // concatenation incrementally as tasks stream into the batch).
+
+  LOG(INFO) << "The number of BatchingSessionTask is " << batch->num_tasks();
+
   batch->WaitUntilClosed();
 
   if (batch->empty()) {

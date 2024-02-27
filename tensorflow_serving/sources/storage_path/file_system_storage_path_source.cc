@@ -400,7 +400,7 @@ Status FileSystemStoragePathSource::PollFileSystemAndInvokeCallback() {
     }
     for (const ServableData<StoragePath>& version : versions) {
       if (version.status().ok()) {
-        VLOG(1) << "File-system polling update: Servable:" << version.id()
+        VLOG(2) << "File-system polling update: Servable:" << version.id()
                 << "; Servable path: " << version.DataOrDie()
                 << "; Polling frequency: "
                 << config_.file_system_poll_wait_seconds();
