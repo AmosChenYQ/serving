@@ -23,6 +23,7 @@ import numpy as np
 from PIL import Image
 import grpc
 import requests
+import time
 
 import tensorflow as tf
 from tensorflow.core.framework import tensor_pb2
@@ -96,17 +97,23 @@ def main(_):
   # Send request
   # See prediction_service.proto for gRPC request/response details.
 
-  for batch_size in range(16):
+  time_cost = []
 
-    request = predict_pb2.PredictRequest()
-    request.model_spec.name = 'default'
-    request.model_spec.signature_name = 'serving_default'
-    request.inputs['inputs'].CopyFrom(
-        tf.contrib.util.make_tensor_proto(restore_tensor_proto(file_name="/root/scripts/saved-models-from-zoo/tensor_proto_data/vgg/batch_size_{0}.pb".format(batch_size+1)),
-                                          shape=[batch_size+1, 224, 224, 3]))
-    result = stub.Predict(request, 10.0)  # 10 secs timeout
+  for batch_size in [1, 2, 4, 8]:
+    for i in range(4):
+      request = predict_pb2.PredictRequest()
+      request.model_spec.name = 'default'
+      request.model_spec.signature_name = 'serving_default'
+      request.inputs['inputs'].CopyFrom(
+          tf.contrib.util.make_tensor_proto(restore_tensor_proto(file_name="/root/scripts/saved-models-from-zoo/tensor_proto_data/vgg/batch_size_{0}.pb".format(batch_size+1)),
+                                            shape=[batch_size+1, 224, 224, 3]))
+      start_time = time.time()
+      result = stub.Predict(request, 30.0)  # 10 secs timeout
+      end_time = time.time()
+      time_cost.append(1000 * (end_time - start_time))
 
-    print(result.outputs['outputs'].tensor_shape)
+
+  print(time_cost)
 
 
 if __name__ == '__main__':
